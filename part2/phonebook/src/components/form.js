@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { create, update } from '../services/persons';
 
-export default function Form({ persons, setPersons }) {
+export default function Form({
+  persons,
+  setPersons,
+  setSuccessMessage,
+  setErrorMessage,
+}) {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const handleSubmit = (e) => {
@@ -17,19 +22,32 @@ export default function Form({ persons, setPersons }) {
         update(oldPerson.id, {
           name: newName,
           number: newNumber,
-        }).then((returnedPerson) => {
-          setPersons((people) =>
-            people.map((person) =>
-              person.id !== oldPerson.id ? person : returnedPerson
-            )
-          );
-        });
+        })
+          .then((returnedPerson) => {
+            setPersons((people) =>
+              people.map((person) =>
+                person.id !== oldPerson.id ? person : returnedPerson
+              )
+            );
+            setSuccessMessage(`Updated ${newName} number`);
+            setTimeout(() => setSuccessMessage(null), 5000);
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `Person ${newName} was already removed from the server`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
+          });
       }
     } else {
       const newPerson = { name: newName, number: newNumber };
       create(newPerson).then((returnedPerson) =>
         setPersons((p) => [...p, returnedPerson])
       );
+      setSuccessMessage(`Added ${newName}`);
+      setTimeout(() => setSuccessMessage(null), 5000);
     }
     setNewName('');
     setNewNumber('');
