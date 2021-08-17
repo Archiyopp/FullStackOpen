@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { create } from '../services/persons';
 
 export default function Form({ persons, setPersons }) {
   const [newName, setNewName] = useState('');
@@ -9,7 +10,10 @@ export default function Form({ persons, setPersons }) {
       alert(`${newName} is already on the phonebook`);
       return;
     }
-    setPersons([...persons, { name: newName, number: newNumber }]);
+    const newPerson = { name: newName, number: newNumber };
+    create(newPerson).then((returnedPerson) =>
+      setPersons((p) => [...p, returnedPerson])
+    );
     setNewName('');
   };
   return (
