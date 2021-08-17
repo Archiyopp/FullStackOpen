@@ -22,7 +22,10 @@ const App = () => {
       <h2>Add a new</h2>
       <Form persons={persons} setPersons={setPersons} />
       <h2>Numbers</h2>
-      <FilteredPeople people={filteredPersons} />
+      <FilteredPeople
+        people={filteredPersons}
+        setPersons={setPersons}
+      />
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Person({ number, name }) {
+export default function Person({ number, name, deletePerson }) {
   return (
     <li>
-      {name} - {number}
+      {name} - {number} <button onClick={deletePerson}>delete</button>
     </li>
   );
 }
