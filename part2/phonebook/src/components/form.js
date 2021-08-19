@@ -43,11 +43,19 @@ export default function Form({
       }
     } else {
       const newPerson = { name: newName, number: newNumber };
-      create(newPerson).then((returnedPerson) =>
-        setPersons((p) => [...p, returnedPerson])
-      );
-      setSuccessMessage(`Added ${newName}`);
-      setTimeout(() => setSuccessMessage(null), 5000);
+      create(newPerson)
+        .then((returnedPerson) =>
+          setPersons((p) => [...p, returnedPerson])
+        )
+        .then(() => {
+          setSuccessMessage(`Added ${newName}`);
+          setTimeout(() => setSuccessMessage(null), 5000);
+        })
+        .catch((error) => {
+          console.log(error.response.data, error.message);
+          setErrorMessage(error.response.data.error);
+          setTimeout(() => setErrorMessage(null), 5000);
+        });
     }
     setNewName('');
     setNewNumber('');
